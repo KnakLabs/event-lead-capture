@@ -1,0 +1,32 @@
+# Ruff is the linter and the formatter. The config mirrors the copy Knak runs
+# internally, so the shared modules format identically in both and a change to
+# either ports as a plain diff.
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+# Curated rather than ALL, which silently adds rules on upgrade. Each earns its
+# place; RET and SIM are the ones that keep the nesting flat.
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes (unused imports/vars, undefined names)
+    "I",   # isort — deterministic import ordering
+    "UP",  # pyupgrade — modern syntax (incl. `X | None` over Optional[X])
+    "B",   # flake8-bugbear — likely bugs (mutable defaults, etc.)
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+    "RET", # flake8-return — guard-clause / early-return hygiene
+    "BLE", # flake8-blind-except — every bare `except Exception` must be justified
+]
+ignore = [
+    "E501",  # line length is the formatter's job, not a lint error
+]
+
+[tool.ruff.format]
+# Single quotes, matching the deployed copy.
+quote-style = "single"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

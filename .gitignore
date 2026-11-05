@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+.idea/
+.vscode/
+leads.db
+queue.db
+
+# Google service account private keys — never commit.
+# Google's own download name is <project>-<hash>.json, which matched none of
+# the patterns below, so every .json at the repo root is ignored instead and
+# the few that belong in git are re-included by name.
+*-service-account*.json
+*-credentials*.json
+/*.json
+!/slack_app_manifest.json

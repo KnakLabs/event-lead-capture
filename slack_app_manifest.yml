@@ -1,0 +1,41 @@
+# Step 1 manifest — creates the app with the right scopes and nothing that needs
+# a live URL.
+#
+# Event Subscriptions and Interactivity are deliberately absent. Slack verifies a
+# Request URL the moment you save it, and the server can't answer until it has the
+# signing secret — which doesn't exist until the app is created. So: create the app
+# from this, collect the two credentials, start the server, THEN add both URLs in
+# the Slack UI. See README → Slack app setup.
+display_information:
+  name: Event Lead Capture
+  description: Tag me in an event channel with a badge photo and I'll push the lead to Marketo.
+  background_color: "#1f2937"
+features:
+  bot_user:
+    display_name: Lead Capture
+    always_online: false
+  app_home:
+    home_tab_enabled: false
+    # Captures happen in channels, not DMs, so the messages tab isn't needed.
+    messages_tab_enabled: false
+oauth_config:
+  scopes:
+    bot:
+      - app_mentions:read  # starts a lead: @mention with a badge photo
+      - channels:read      # read the channel NAME — it identifies the Marketo program
+      - groups:read        # same, for private event channels
+      - channels:history   # read the whole thread when tagged, not just that message
+      - groups:history     # same, for private event channels
+      - chat:write         # post and update the lead card in a thread
+      - files:read         # download the badge image and the voice-note audio
+      - reactions:write    # 👀 / 👂 acknowledgement on the rep's message
+# Event Subscription to add in the UI, once the Request URL is saved:
+#   app_mention  - the only trigger. The agent acts when tagged, and reads the
+#                  whole thread at that point to decide what to do.
+# There is no Interactivity Request URL: the app has no buttons or modals.
+settings:
+  org_deploy_enabled: false
+  # No Socket Mode: this app is reached over HTTPS, and requests are
+  # authenticated with the signing secret.
+  socket_mode_enabled: false
+  token_rotation_enabled: false
